@@ -103,3 +103,14 @@ add_action( 'admin_menu', function () {
     );
 });
 
+/**
+ * Add settings link.
+ */
+
+add_filter( 'plugin_action_links_'.plugin_basename( __FILE__ ), function ( $links ) {
+    $settings_url = admin_url( 'tools.php?page=find-junk-html' );
+    $settings_link = '<a href="'.$settings_url.'">'.__( 'Settings', 'find-junk-html' ).'</a>';
+    array_unshift( $links, $settings_link );
+    return $links;
+});
+
