@@ -1,6 +1,8 @@
+![screenshot](/screenshot.jpg)
+
 # Find Junk HTML
 
-![screenshot](/screenshot.jpg)
+Find Junk HTML looks for div's in published posts, and links you to them.
 
 ## License
 
