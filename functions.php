@@ -1,6 +1,6 @@
 <?php
 
-function fjh_get_needles()
+function fjh_get_default_needles()
 {
     return [
         [
@@ -40,6 +40,11 @@ function fjh_get_needles()
             'active' => true,
         ],
     ];
+}
+
+function fjh_get_needles()
+{
+    return fjh_get_default_needles();
 }
 
 function fjh_get_active_needles()
@@ -85,6 +90,68 @@ function fjh_find_junk_posts()
 }
 
 function fjh_admin_page()
+{
+    if ( $_GET['fjh-task'] == 'results' )
+    {
+        admin_page_results();
+        return;
+    }
+
+    admin_page_settings();
+}
+
+function admin_page_settings()
+{
+?>
+<div class="wrap fjh-wrapper">
+
+    <h2><?php _e( 'Find Junk HTML', 'find-junk-html' ); ?></h2>
+
+<?php
+
+$needles = fjh_get_default_needles();
+
+if ( !empty( $needles ) )
+{
+?>
+    <div class="settings">
+<?php
+
+    foreach ( $needles as $needle )
+    {
+        $checked = !$needle['active'] ?: 'checked';
+?>
+        <div class="checkbox">
+            <label for="fjh-needle-<?=$needle['tag'];?>">
+                <input type="checkbox" name="fjh-needle-<?=$needle['tag'];?>" id="fjh-needle-<?=$needle['tag'];?>" value="replaceme" <?=$checked;?>>
+                <?=$needle['tag'];?>
+            </label>
+        </div>
+<?php
+    }
+
+?>
+    </div>
+<?php
+}
+
+?>
+
+    <div class="fjh-buttons">
+        <a href="tools.php?page=find-junk-html" class="button button-secondary">Save settings</a>
+        <a href="tools.php?page=find-junk-html&fjh-task=results" class="button button-primary">Let's find junk!</a>
+    </div>
+
+</div><!-- wrap -->
+<style>
+.fjh-wrapper .settings { margin-top: 15px; }
+.fjh-wrapper .fjh-buttons { margin-top: 30px; font-size: 0; }
+.fjh-wrapper .fjh-buttons .button { margin-right: 15px; }
+</style>
+<?php
+}
+
+function admin_page_results()
 {
     $junk_posts = fjh_find_junk_posts();
 ?>
