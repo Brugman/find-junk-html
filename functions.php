@@ -1,58 +1,58 @@
 <?php
 
-function fjh_get_default_needles()
+/**
+ * Functions.
+ */
+
+function fjh_textdomain()
+{
+    return 'find-junk-html';
+}
+
+function fjh_get_all_needles()
 {
     return [
         [
             'code' => '<h1',
             'tag' => 'h1',
             'desc' => 'The h1 tag is used by the theme for the page title.',
-            'active' => true,
         ],
         [
             'code' => '<div',
             'tag' => 'div',
             'desc' => 'The div tag is rarely required, and often part of an old page builder. When in doubt, ask the theme developer.',
-            'active' => true,
         ],
         [
             'code' => '<span',
             'tag' => 'span',
             'desc' => 'The span tag is rarely required, and often part of an old page builder. When in doubt, ask the theme developer.',
-            'active' => true,
         ],
         [
             'code' => '<b',
             'tag' => 'b',
             'desc' => 'The b tag has been superseded by the strong tag. Used for strong importance. Not for its bold look.',
-            'active' => true,
         ],
         [
             'code' => '<i',
             'tag' => 'i',
             'desc' => 'The i tag has been superseded by the em tag. Used for emphasis. Not for its italic look.',
-            'active' => true,
         ],
         [
             'code' => ' style=',
             'tag' => 'style',
             'desc' => 'The style tag is almost always a relic from a previous website. The theme should take care of styling.',
-            'active' => true,
         ],
     ];
 }
 
-function fjh_get_needles()
-{
-    return fjh_get_default_needles();
-}
-
 function fjh_get_active_needles()
 {
-    $needles = fjh_get_needles();
+    $needles = fjh_get_all_needles();
 
-    $active_needles = array_filter( $needles, function ( $item ) {
-        return $item['active'];
+    $junk = get_option( 'fjh_options' )['fjh_junk'] ?? [];
+
+    $active_needles = array_filter( $needles, function ( $item ) use ( $junk ) {
+        return in_array( $item['tag'], $junk );
     });
 
     return $active_needles;
@@ -89,85 +89,43 @@ function fjh_find_junk_posts()
     return $junk_posts;
 }
 
-function fjh_admin_page()
-{
-    if ( $_GET['fjh-task'] == 'results' )
-    {
-        admin_page_results();
-        return;
-    }
-
-    admin_page_settings();
-}
-
-function admin_page_settings()
+function fjh_nav()
 {
 ?>
-<div class="wrap fjh-wrapper">
-
-    <h2><?php _e( 'Find Junk HTML', 'find-junk-html' ); ?></h2>
-
-<?php
-
-$needles = fjh_get_default_needles();
-
-if ( !empty( $needles ) )
-{
-?>
-    <div class="settings">
-<?php
-
-    foreach ( $needles as $needle )
-    {
-        $checked = !$needle['active'] ?: 'checked';
-?>
-        <div class="checkbox">
-            <label for="fjh-needle-<?=$needle['tag'];?>">
-                <input type="checkbox" name="fjh-needle-<?=$needle['tag'];?>" id="fjh-needle-<?=$needle['tag'];?>" value="replaceme" <?=$checked;?>>
-                <?=$needle['tag'];?>
-            </label>
-        </div>
-<?php
-    }
-
-?>
-    </div>
-<?php
-}
-
-?>
-
-    <div class="fjh-buttons">
-        <a href="tools.php?page=find-junk-html" class="button button-secondary">Save settings</a>
-        <a href="tools.php?page=find-junk-html&fjh-task=results" class="button button-primary">Let's find junk!</a>
-    </div>
-
-</div><!-- wrap -->
+<ul class="fjh-nav">
+    <li><a href="<?=admin_url( 'options-general.php?page=fjh-options' );?>"><?php _e( 'Settings', fjh_textdomain() ); ?></a></li>
+    <li><a href="<?=admin_url( 'tools.php?page=fjh' );?>"><?php _e( 'Find Junk HTML', fjh_textdomain() ); ?></a></li>
+</ul>
 <style>
-.fjh-wrapper .settings { margin-top: 15px; }
-.fjh-wrapper .fjh-buttons { margin-top: 30px; font-size: 0; }
-.fjh-wrapper .fjh-buttons .button { margin-right: 15px; }
+.fjh-nav { display: flex; margin: 0 0 30px 0; }
+.fjh-nav li + li { margin-left: 15px; }
 </style>
 <?php
 }
 
-function admin_page_results()
+/**
+ * Page: FJH.
+ */
+
+function fjh_page_fjh()
 {
     $junk_posts = fjh_find_junk_posts();
 ?>
-<div class="wrap">
+<div class="wrap fjh-wrapper">
 
-    <h2><?php _e( 'Find Junk HTML', 'find-junk-html' ); ?></h2>
+    <h1><?php _e( 'Find Junk HTML', fjh_textdomain() ); ?></h1>
+
+    <?php fjh_nav(); ?>
 
 <?php if ( !empty( $junk_posts ) ): ?>
 
     <table class="wp-list-table widefat fixed striped" style="width: auto; margin-top: 16px;">
         <thead>
             <tr>
-                <td><?php _e( 'ID', 'find-junk-html' ); ?></td>
-                <td><?php _e( 'Type', 'find-junk-html' ); ?></td>
-                <td><?php _e( 'Title', 'find-junk-html' ); ?></td>
-                <td><?php _e( 'Junk', 'find-junk-html' ); ?></td>
+                <td><?php _e( 'ID', fjh_textdomain() ); ?></td>
+                <td><?php _e( 'Type', fjh_textdomain() ); ?></td>
+                <td><?php _e( 'Title', fjh_textdomain() ); ?></td>
+                <td><?php _e( 'Junk', fjh_textdomain() ); ?></td>
             </tr>
         </thead>
         <tbody>
@@ -175,7 +133,7 @@ function admin_page_results()
             <tr>
                 <td><?=$post_id;?></td>
                 <td><?=get_post_type_object( get_post_type( $post_id ) )->labels->singular_name;?></td>
-                <td><a href="<?=get_edit_post_link( $post_id );?>" title="<?php _e( 'Edit this post', 'find-junk-html' ); ?>"><?=get_the_title( $post_id );?></a></td>
+                <td><a href="<?=get_edit_post_link( $post_id );?>" title="<?php _e( 'Edit this post', fjh_textdomain() ); ?>"><?=get_the_title( $post_id );?></a></td>
                 <td><?=implode( ' + ', $tags );?></td>
             </tr>
 <?php endforeach; // $junk_posts ?>
@@ -184,11 +142,82 @@ function admin_page_results()
 
 <?php else: // $junk_posts is empty ?>
 
-    <p><?php _e( 'No HTML junk was found in your posts. Nice!', 'find-junk-html' ); ?></p>
+    <p><?php _e( 'No HTML junk was found in your posts. Nice!', fjh_textdomain() ); ?></p>
 
 <?php endif; // $junk_posts ?>
 
 </div><!-- wrap -->
 <?php
+}
+
+/**
+ * Page: Options.
+ */
+
+function fjh_page_options()
+{
+?>
+<div class="wrap fjh-wrapper">
+
+    <h1><?php _e( 'Find Junk HTML', fjh_textdomain() ); ?></h1>
+
+    <?php fjh_nav(); ?>
+
+    <form method="post" action="options.php">
+<?php
+
+settings_fields('fjh_options');
+do_settings_sections('fjh_needles');
+submit_button();
+
+?>
+    </form>
+
+</div><!-- wrap -->
+<?php
+}
+
+/**
+ * Callbacks.
+ */
+
+function fjh_needles_cb( $args )
+{
+    echo '<p>'.__( 'What do you consider junk?', fjh_textdomain() ).'</p>';
+}
+
+function fjh_junk_cb()
+{
+    echo fjh_form_field_checkbox_group( 'fjh_options', 'fjh_junk' );
+}
+
+/**
+ * Form field HTML.
+ */
+
+function fjh_form_field_checkbox_group( $options, $field_name )
+{
+    if ( !$options || !$field_name )
+        return;
+
+    $needles = fjh_get_all_needles();
+
+    if ( empty( $needles ) )
+        return;
+
+    $values = get_option( $options )[ $field_name ] ?? [];
+
+    foreach ( $needles as $needle )
+    {
+        $checked = in_array( $needle['tag'], $values ) ? 'checked' : '';
+?>
+<div class="checkbox">
+    <label for="label-<?=$needle['tag'];?>" title="<?=$needle['desc'];?>">
+        <input type="checkbox" name="<?=$options;?>[<?=$field_name;?>][]" id="label-<?=$needle['tag'];?>" value="<?=$needle['tag'];?>" <?=$checked;?>>
+        <?=$needle['tag'];?>
+    </label>
+</div>
+<?php
+    }
 }
 
