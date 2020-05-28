@@ -71,17 +71,31 @@ function fjh_find_junk_posts()
 
     foreach ( $needles as $needle )
     {
-        $posts = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}posts WHERE ( post_content LIKE '%".$needle['code']."%' OR post_excerpt LIKE '%".$needle['code']."%' ) AND post_status = 'publish' AND post_type != 'revision'" );
+        $posts = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}posts WHERE ( post_content LIKE '%".$needle['code']."%' OR post_excerpt LIKE '%".$needle['code']."%' ) AND post_status = 'publish' AND post_type NOT IN ( 'revision', 'oembed_cache' )" );
 
         if ( !empty( $posts ) )
+        {
             foreach ( $posts as $post )
-                $junk_posts[ $post->ID ][] = $needle['tag'];
+            {
+                if ( isset( $junk_posts[ $post->ID ] ) && in_array( $needle['tag'], $junk_posts[ $post->ID ] ) )
+                    continue;
 
-        $postmetas = $wpdb->get_results( "SELECT post_id FROM {$wpdb->prefix}postmeta pm INNER JOIN {$wpdb->prefix}posts p ON pm.post_id = p.ID WHERE pm.meta_value LIKE '%".$needle['code']."%' AND p.post_status = 'publish' AND p.post_type != 'revision'" );
+                $junk_posts[ $post->ID ][] = $needle['tag'];
+            }
+        }
+
+        $postmetas = $wpdb->get_results( "SELECT post_id FROM {$wpdb->prefix}postmeta pm INNER JOIN {$wpdb->prefix}posts p ON pm.post_id = p.ID WHERE pm.meta_value LIKE '%".$needle['code']."%' AND p.post_status = 'publish' AND p.post_type NOT IN ( 'revision', 'oembed_cache' )" );
 
         if ( !empty( $postmetas ) )
+        {
             foreach ( $postmetas as $postmeta )
+            {
+                if ( isset( $junk_posts[ $postmeta->post_id ] ) && in_array( $needle['tag'], $junk_posts[ $postmeta->post_id ] ) )
+                    continue;
+
                 $junk_posts[ $postmeta->post_id ][] = $needle['tag'];
+            }
+        }
     }
 
     krsort( $junk_posts );
@@ -134,7 +148,7 @@ function fjh_page_fjh()
                 <td><?=$post_id;?></td>
                 <td><?=get_post_type_object( get_post_type( $post_id ) )->labels->singular_name;?></td>
                 <td><a href="<?=get_edit_post_link( $post_id );?>" title="<?php _e( 'Edit this post', fjh_textdomain() ); ?>"><?=get_the_title( $post_id );?></a></td>
-                <td><?=implode( ' + ', $tags );?></td>
+                <td><?=implode( ' ', $tags );?></td>
             </tr>
 <?php endforeach; // $junk_posts ?>
         </tbody>
