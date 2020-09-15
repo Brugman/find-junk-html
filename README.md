@@ -34,6 +34,6 @@ Found a bug? Anything you would like to ask, add or change? Please open an issue
 
 Pull requests are welcome. Please try to match the current code formatting.
 
-## Creator
+## Author
 
 [Tim Brugman](https://github.com/Brugman)
