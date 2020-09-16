@@ -1,8 +1,8 @@
 # Find Junk HTML
 
-> Find Junk HTML looks for div's in published posts, and links you to them.
+> Find Junk HTML identifies undesired HTML in your posts.
 
-![screenshot](/screenshot.jpg)
+![screenshot](/screenshot.png)
 
 ## Installation
 
