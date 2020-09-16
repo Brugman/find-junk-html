@@ -1,6 +1,6 @@
 # Find Junk HTML
 
-> Find Junk HTML identifies undesired HTML in your posts.
+> A WordPress plugin to find undesired HTML in your posts.
 
 ![screenshot](/screenshot.png)
 
