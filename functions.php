@@ -105,15 +105,29 @@ function fjh_find_junk_posts()
 
 function fjh_nav()
 {
+    $pages = [
+        [
+            'link' => admin_url( 'options-general.php?page=fjh-options' ),
+            'title' => __( 'Settings', fjh_textdomain() ),
+        ],
+        [
+            'link' => admin_url( 'tools.php?page=fjh' ),
+            'title' => __( 'Find Junk HTML', fjh_textdomain() ),
+        ],
+    ];
 ?>
-<ul class="fjh-nav">
-    <li><a href="<?=admin_url( 'options-general.php?page=fjh-options' );?>"><?php _e( 'Settings', fjh_textdomain() ); ?></a></li>
-    <li><a href="<?=admin_url( 'tools.php?page=fjh' );?>"><?php _e( 'Find Junk HTML', fjh_textdomain() ); ?></a></li>
-</ul>
-<style>
-.fjh-nav { display: flex; margin: 0 0 30px 0; }
-.fjh-nav li + li { margin-left: 15px; }
-</style>
+<div class="acf-admin-toolbar">
+    <h2><i class="acf-tab-icon dashicons dashicons-trash"></i> Find Junk HTML</h2>
+<?php
+    foreach ( $pages as $page )
+    {
+        $is_active = strpos( $page['link'], $_SERVER['REQUEST_URI'] ) !== false ? 'is-active' : '';
+?>
+    <a class="acf-tab <?=$is_active;?>" href="<?=$page['link'];?>"><?=$page['title'];?></a>
+<?php
+    }
+?>
+</div>
 <?php
 }
 
@@ -128,8 +142,6 @@ function fjh_page_fjh()
 <div class="wrap fjh-wrapper">
 
     <h1><?php _e( 'Find Junk HTML', fjh_textdomain() ); ?></h1>
-
-    <?php fjh_nav(); ?>
 
 <?php if ( !empty( $junk_posts ) ): ?>
 
@@ -173,9 +185,7 @@ function fjh_page_options()
 ?>
 <div class="wrap fjh-wrapper">
 
-    <h1><?php _e( 'Find Junk HTML', fjh_textdomain() ); ?></h1>
-
-    <?php fjh_nav(); ?>
+    <h1><?php _e( 'Settings', fjh_textdomain() ); ?></h1>
 
     <form method="post" action="options.php">
 <?php
