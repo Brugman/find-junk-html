@@ -30,10 +30,9 @@ add_action( 'admin_menu', function () {
  * Add settings link.
  */
 
-add_filter( 'plugin_action_links_'.plugin_basename( __FILE__ ), function ( $links ) {
-    $settings_url = admin_url( 'options-general.php?page=find-junk-html' );
-    $settings_link = '<a href="'.$settings_url.'">'.__( 'Settings', fjh_textdomain() ).'</a>';
-    array_unshift( $links, $settings_link );
+add_filter( 'plugin_action_links_'.basename( __DIR__ ).'/find-junk-html.php', function ( $links ) {
+    $settings_url = admin_url( 'options-general.php?page=fjh-options' );
+    $links['settings'] = '<a href="'.$settings_url.'">'.__( 'Settings', fjh_textdomain() ).'</a>';
 
     return $links;
 });
