@@ -116,14 +116,15 @@ function fjh_nav()
         ],
     ];
 ?>
-<div class="acf-admin-toolbar">
-    <h2><i class="acf-tab-icon dashicons dashicons-trash"></i> Find Junk HTML</h2>
+<link rel="stylesheet" href="<?=plugins_url( 'find-junk-html.min.css', __FILE__ );?>" />
+<div class="fjh-acf-admin-toolbar">
+    <h2><i class="fjh-acf-tab-icon dashicons dashicons-trash"></i> Find Junk HTML</h2>
 <?php
     foreach ( $pages as $page )
     {
         $is_active = strpos( $page['link'], $_SERVER['REQUEST_URI'] ) !== false ? 'is-active' : '';
 ?>
-    <a class="acf-tab <?=$is_active;?>" href="<?=$page['link'];?>"><?=$page['title'];?></a>
+    <a class="fjh-acf-tab <?=$is_active;?>" href="<?=$page['link'];?>"><?=$page['title'];?></a>
 <?php
     }
 ?>
