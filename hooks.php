@@ -67,3 +67,12 @@ add_action( 'admin_init', function () {
     );
 });
 
+/**
+ * Add admin header navigation.
+ */
+
+add_action( 'current_screen', function ( $screen ) {
+    if ( strpos( $screen->id, '_page_fjh' ) !== false )
+        add_action( 'in_admin_header', 'fjh_nav' );
+});
+

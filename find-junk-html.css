@@ -1,0 +1,43 @@
+.fjh-acf-admin-toolbar {
+    background: #fff;
+    border-bottom: 1px solid #ccd0d4;
+}
+.fjh-acf-admin-toolbar h2 {
+    font-size: 14px;
+    line-height: 2.57143;
+    display: inline-block;
+    padding: 5px 0;
+    margin: 0 10px 0 0;
+}
+.fjh-acf-admin-toolbar h2 i {
+    vertical-align: middle;
+    color: #babbbc;
+}
+.fjh-acf-admin-toolbar .fjh-acf-tab {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 2.57143;
+    padding: 5px;
+    margin: 0 5px;
+    text-decoration: none;
+    color: inherit;
+}
+.fjh-acf-admin-toolbar .fjh-acf-tab.is-active {
+    border-bottom: #0071a4 solid 3px;
+    padding-bottom: 2px;
+}
+.fjh-acf-admin-toolbar .fjh-acf-tab:hover {
+    color: #00a0d2;
+}
+.fjh-acf-admin-toolbar .fjh-acf-tab:focus {
+    box-shadow: none;
+}
+#wpcontent .fjh-acf-admin-toolbar {
+    margin-left: -20px;
+    padding-left: 20px;
+}
+@media screen and (max-width: 600px) {
+    .fjh-acf-admin-toolbar {
+        display: none;
+    }
+}
