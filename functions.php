@@ -239,7 +239,7 @@ function fjh_form_field_checkbox_group( $options, $field_name )
         $checked = in_array( $needle['tag'], $values ) ? 'checked' : '';
 ?>
 <div class="checkbox">
-    <label for="label-<?=$needle['tag'];?>" title="<?=$needle['desc'];?>">
+    <label for="label-<?=$needle['tag'];?>" title="<?=$needle['desc'] ?? '';?>">
         <input type="checkbox" name="<?=$options;?>[<?=$field_name;?>][]" id="label-<?=$needle['tag'];?>" value="<?=$needle['tag'];?>" <?=$checked;?>>
         <?=$needle['tag'];?>
     </label>
