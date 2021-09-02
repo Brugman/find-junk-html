@@ -11,7 +11,7 @@ function fjh_textdomain()
 
 function fjh_get_all_needles()
 {
-    return [
+    $needles = [
         [
             'code' => '<h1',
             'tag' => 'h1',
@@ -43,6 +43,8 @@ function fjh_get_all_needles()
             'desc' => 'The style tag is almost always a relic from a previous website. The theme should take care of styling.',
         ],
     ];
+
+    return apply_filters( 'fjh_needles', $needles );
 }
 
 function fjh_get_active_needles()
