@@ -14,32 +14,32 @@ function fjh_get_all_needles()
     $needles = [
         [
             'code' => '<h1',
-            'tag' => 'h1',
+            'tag'  => 'h1',
             'desc' => 'The h1 tag is used by the theme for the page title.',
         ],
         [
             'code' => '<div',
-            'tag' => 'div',
+            'tag'  => 'div',
             'desc' => 'The div tag is rarely required, and often part of an old page builder. When in doubt, ask the theme developer.',
         ],
         [
             'code' => '<span',
-            'tag' => 'span',
+            'tag'  => 'span',
             'desc' => 'The span tag is rarely required, and often part of an old page builder. When in doubt, ask the theme developer.',
         ],
         [
             'code' => '<b',
-            'tag' => 'b',
+            'tag'  => 'b',
             'desc' => 'The b tag has been superseded by the strong tag. Used for strong importance. Not for its bold look.',
         ],
         [
             'code' => '<i',
-            'tag' => 'i',
+            'tag'  => 'i',
             'desc' => 'The i tag has been superseded by the em tag. Used for emphasis. Not for its italic look.',
         ],
         [
             'code' => ' style=',
-            'tag' => 'style',
+            'tag'  => 'style',
             'desc' => 'The style tag is almost always a relic from a previous website. The theme should take care of styling.',
         ],
     ];
@@ -109,11 +109,11 @@ function fjh_nav()
 {
     $pages = [
         [
-            'link' => admin_url( 'options-general.php?page=fjh-options' ),
+            'link'  => admin_url( 'options-general.php?page=fjh-options' ),
             'title' => __( 'Settings', fjh_textdomain() ),
         ],
         [
-            'link' => admin_url( 'tools.php?page=fjh' ),
+            'link'  => admin_url( 'tools.php?page=fjh' ),
             'title' => __( 'Find Junk HTML', fjh_textdomain() ),
         ],
     ];
