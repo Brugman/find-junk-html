@@ -45,7 +45,7 @@ add_action( 'admin_init', function () {
     register_setting(
         'fjh_options', // option group
         'fjh_options', // option name
-        [] // args
+        [ 'autoload' => false ] // args
     );
     // sections
     $section = 'needles';
